@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 def scrape_stock(ticker_symbol):
     options = Options()
@@ -121,6 +122,7 @@ def scrape_stock(ticker_symbol):
     return stock
 
 app = Flask(__name__)
+CORS(app, resources={r"/scrape/*": {"origins": "*"}})  # Allow any origin
 
 @app.route('/')
 def index():

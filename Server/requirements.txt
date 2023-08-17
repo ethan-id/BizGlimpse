@@ -1,4 +1,4 @@
 Flask==2.3.2
+Flask_Cors==4.0.0
 selenium==4.11.2
-tqdm==4.66.1
 webdriver_manager==4.0.0
