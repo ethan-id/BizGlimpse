@@ -1,10 +1,10 @@
 <h1 align="center">
     <strong>
-        Flask Stock Scraping API
+        Server/API
     </strong>
     <hr/>
     <p align="center" style="font-size: 20px;font-weight: 500">
-        Flask based API for scraping stocks from Yahoo Finance 
+        Selenium based Flask API for scraping stocks from Yahoo Finance 
     </p>
 </h1>
 
