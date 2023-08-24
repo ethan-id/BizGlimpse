@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import { StockData } from '@/types';
+import {Stock} from './stock';
 import {
     Input,
     Button,
@@ -8,7 +10,7 @@ import {
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
-    const [stockData, setStockData] = useState(null);
+    const [stockData, setStockData] = useState<StockData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -19,7 +21,6 @@ export const Grabber = () => {
         try {
             const response = await fetch(`http://localhost:5000/scrape/${ticker}`);
             const data = await response.json();
-            console.log(data)
 
             if (response.ok) {
                 setStockData(data);
@@ -28,12 +29,11 @@ export const Grabber = () => {
                 setError(data.message || "An error occurred");
             }
 
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message || "An unexpected error occurred");
         } finally {
             setLoading(false);
         }
-        console.log(stockData);
     };
 
     return (
@@ -53,22 +53,17 @@ export const Grabber = () => {
                     Scrape!
                 </Button>
             </div>
-            {loading && <Progress
+
+            {loading && !error && <Progress
                 size="sm"
                 isIndeterminate
                 aria-label="Loading..."
                 className="max-w-md m-auto mt-12"
             />}
+
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {stockData && <h1 className='m-auto mt-12'>{stockData.ticker}</h1>}
-            {stockData && <hr></hr>}
-            <div className='w-[80vw]'>
-                {stockData && Object.keys(stockData).map((key) => {
-                    return (
-                        <div className='text-2xl flex flex-row justify-between'><strong>{key.replaceAll('_', ' ')}:</strong>{stockData[key]}</div>
-                    )
-                })}
-            </div>
+
+            {!error && stockData && <Stock stockData={stockData}/>}
         </div>
     );
 }
