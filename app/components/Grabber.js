@@ -33,11 +33,12 @@ export const Grabber = () => {
         } finally {
             setLoading(false);
         }
+        console.log(stockData);
     };
 
     return (
         <div className='flex flex-col'>
-            <div className='flex flex-row gap-4 m-12'>
+            <div className='flex flex-row gap-4 m-12 m-auto'>
                 <Input
                     type="text"
                     value={ticker}
@@ -56,15 +57,18 @@ export const Grabber = () => {
                 size="sm"
                 isIndeterminate
                 aria-label="Loading..."
-                className="max-w-md"
+                className="max-w-md m-auto mt-12"
             />}
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {stockData && (
-                <div>
-                    <p>Data for {ticker}</p>
-                    <p>{JSON.stringify(stockData, null, 2)}</p>
-                </div>
-            )}
+            {stockData && <h1 className='m-auto mt-12'>{stockData.ticker}</h1>}
+            {stockData && <hr></hr>}
+            <div className='w-[80vw]'>
+                {stockData && Object.keys(stockData).map((key) => {
+                    return (
+                        <div className='text-2xl flex flex-row justify-between'><strong>{key.replaceAll('_', ' ')}:</strong>{stockData[key]}</div>
+                    )
+                })}
+            </div>
         </div>
     );
 }
