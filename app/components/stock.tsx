@@ -1,6 +1,6 @@
 import { StockData } from '@/types';
 import React from 'react';
-import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
+import { Tabs, Tab, Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
 
 type StockProps = {
     stockData: StockData | null;
@@ -33,17 +33,18 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
         { key: "eps", label: "EPS" },
         { key: "pe_ratio", label: "P/E Ratio" },
     ];
+    console.log(stockData);
 
     return (
-        <div className="grid grid-cols-2 gap-8 mt-4">
+        <div>
+            <Tabs>
             {[
                 { title: "Basic Information", columns: basicInfoColumns },
                 { title: "Performance", columns: performanceColumns },
                 { title: "Trading Information", columns: tradingInfoColumns },
                 { title: "Key Metrics", columns: keyMetricsColumns },
             ].map(tableInfo => (
-                <div key={tableInfo.title}>
-                    <h2 className="text-2xl m-2">{tableInfo.title}</h2>
+                <Tab key={tableInfo.title} title={tableInfo.title}>
                     <Table 
                         aria-label={`${tableInfo.title} table with dynamic content`}
                         className="mb-4"    
@@ -59,8 +60,9 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
                             )}
                         </TableBody>
                     </Table>
-                </div>
+                </Tab>
             ))}
+            </Tabs>
         </div>
     )
 };

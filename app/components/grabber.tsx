@@ -28,7 +28,6 @@ export const Grabber = () => {
                 console.log('error')
                 setError(data.message || "An error occurred");
             }
-
         } catch (err: any) {
             setError(err.message || "An unexpected error occurred");
         } finally {
