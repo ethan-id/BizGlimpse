@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 def scrape_stock(ticker_symbol):
     options = Options()
     options.add_argument('--headless=new')
-    driver = webdriver.Chrome(
+    driver = webdriver.Chrome(  
         service=ChromeService(ChromeDriverManager().install()),
         options=options
     )

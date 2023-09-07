@@ -33,7 +33,6 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
         { key: "eps", label: "EPS" },
         { key: "pe_ratio", label: "P/E Ratio" },
     ];
-    console.log(stockData);
 
     return (
         <div>
@@ -44,18 +43,15 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
                 { title: "Trading Information", columns: tradingInfoColumns },
                 { title: "Key Metrics", columns: keyMetricsColumns },
             ].map(tableInfo => (
-                <Tab key={tableInfo.title} title={tableInfo.title}>
-                    <Table 
-                        aria-label={`${tableInfo.title} table with dynamic content`}
-                        className="mb-4"    
-                    >
+                <Tab className="text-xl p-6" key={tableInfo.title} title={tableInfo.title}>
+                    <Table aria-label={`${tableInfo.title} table with dynamic content`}>
                         <TableHeader columns={tableInfo.columns}>
-                            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+                            {(column) => <TableColumn className="text-large" key={column.key}>{column.label}</TableColumn>}
                         </TableHeader>
                         <TableBody items={[stockData]}>
                             {(item) => (
                                 <TableRow key={item?.ticker}>
-                                    {(columnKey) => <TableCell>{item[columnKey]}</TableCell>}
+                                    {(columnKey) => <TableCell className="text-medium">{item[columnKey]}</TableCell>}
                                 </TableRow>
                             )}
                         </TableBody>
