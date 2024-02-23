@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 import { StockData } from '@/types';
-import {Stock} from './stock';
+import { Stock } from './stock';
+import { MyParticles } from './particles';
 import {
     Input,
     Button,
     Progress
-} from "@nextui-org/react";
+} from '@nextui-org/react';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
@@ -37,6 +38,7 @@ export const Grabber = () => {
 
     return (
         <div className='flex flex-col'>
+            <MyParticles/>
             <div className='flex flex-row gap-4 m-12 m-auto'>
                 <Input
                     type="text"

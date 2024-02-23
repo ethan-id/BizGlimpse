@@ -5,6 +5,8 @@ from scrape import scrape_stock
 app = Flask(__name__)
 CORS(app, resources={r"/scrape/*": {"origins": "*"}})  # Allow any origin
 
+# to do: implement Sai's Stock Stock Analyzer API https://rapidapi.com/vijaysairamv/api/sais-stock-analyzer/overview
+
 @app.route('/')
 def index():
     return "Welcome to the Stock Scraper API!"
