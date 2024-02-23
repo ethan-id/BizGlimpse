@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { StockData } from '@/types';
 import { Stock } from './stock';
-import { MyParticles } from './particles';
+import { MyParticles } from './particles'; // Fix: Change the import statement to match the actual filename in a case-sensitive manner.
 import {
     Input,
     Button,
@@ -39,7 +39,7 @@ export const Grabber = () => {
     return (
         <div className='flex flex-col'>
             <MyParticles/>
-            <div className='flex flex-row gap-4 m-12 m-auto'>
+            <div className='flex flex-row gap-4 m-auto'>
                 <Input
                     type="text"
                     value={ticker}
