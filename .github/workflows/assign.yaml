@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign PR to author
-        uses: peter-evans/assign-to-me@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const assignees = [context.payload.pull_request.user.login];
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              assignees: assignees
+            })
