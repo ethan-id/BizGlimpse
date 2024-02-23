@@ -1,4 +1,4 @@
-import {Grabber} from '../components/grabber';
+import {Grabber} from '../components/Grabber';
 
 export default function Home() {
 	return (
