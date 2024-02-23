@@ -49,11 +49,12 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
                             {(column) => <TableColumn className="text-large" key={column.key}>{column.label}</TableColumn>}
                         </TableHeader>
                         <TableBody items={[stockData]}>
-                            {(item) => (
+                            {(item) => {
+                                return (
                                 <TableRow key={item?.ticker}>
-                                    {(columnKey) => <TableCell className="text-medium">{item[columnKey]}</TableCell>}
+                                    {(columnKey) => <TableCell className="text-medium">{item != null ? item[columnKey as keyof StockData] : null}</TableCell>}
                                 </TableRow>
-                            )}
+                            )}}
                         </TableBody>
                     </Table>
                 </Tab>
