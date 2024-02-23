@@ -2,14 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import {
   type Container,
-  type ISourceOptions,
-  MoveDirection,
-  OutMode,
+  type ISourceOptions
 } from '@tsparticles/engine';
-// import { loadAll } from "@/tsparticles/all"; // if you are going to use `loadAll`, install the "@tsparticles/all" package too.
-// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { loadSlim } from '@tsparticles/slim'; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
-// import { loadBasic } from "@tsparticles/basic"; // if you are going to use `loadBasic`, install the "@tsparticles/basic" package too.
+// import { loadAll } from '@/tsparticles/all'; // if you are going to use `loadAll`, install the '@tsparticles/all' package too.
+// import { loadFull } from 'tsparticles'; // if you are going to use `loadFull`, install the 'tsparticles' package too.
+import { loadSlim } from '@tsparticles/slim'; // if you are going to use `loadSlim`, install the '@tsparticles/slim' package too.
+// import { loadBasic } from '@tsparticles/basic'; // if you are going to use `loadBasic`, install the '@tsparticles/basic' package too.
 
 export const MyParticles = () => {
   const [init, setInit] = useState(false);
@@ -37,7 +35,7 @@ export const MyParticles = () => {
     () => ({
       background: {
         color: {
-          value: "#3e2f30",
+          value: '#3e2f30',
         },
       },
       fpsLimit: 120,
@@ -45,11 +43,11 @@ export const MyParticles = () => {
         events: {
           onClick: {
             enable: true,
-            mode: "push",
+            mode: 'push',
           },
           onHover: {
             enable: true,
-            mode: "repulse",
+            mode: 'repulse',
           },
         },
         modes: {
@@ -64,10 +62,10 @@ export const MyParticles = () => {
       },
       particles: {
         color: {
-          value: "#ffffff",
+          value: '#ffffff',
         },
         links: {
-          color: "#ffffff",
+          color: '#ffffff',
           distance: 150,
           enable: true,
           opacity: 0.5,
@@ -93,7 +91,7 @@ export const MyParticles = () => {
           value: 0.5,
         },
         shape: {
-          type: "circle",
+          type: 'circle',
         },
         size: {
           value: { min: 1, max: 5 },
@@ -107,7 +105,7 @@ export const MyParticles = () => {
   if (init) {
     return (
       <Particles
-        id="tsparticles"
+        id='tsparticles'
         particlesLoaded={particlesLoaded}
         options={options}
       />

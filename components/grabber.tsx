@@ -27,10 +27,10 @@ export const Grabber = () => {
                 setStockData(data);
             } else {
                 console.log('error')
-                setError(data.message || "An error occurred");
+                setError(data.message || 'An error occurred');
             }
         } catch (err: any) {
-            setError(err.message || "An unexpected error occurred");
+            setError(err.message || 'An unexpected error occurred');
         } finally {
             setLoading(false);
         }
