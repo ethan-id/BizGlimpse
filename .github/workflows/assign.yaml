@@ -1,0 +1,29 @@
+name: Assign Pull Request
+
+on:
+  pull_request:
+    types: ["opened", "edited", "reopened", "synchronize"]
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign PR to author
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const assignees = [context.payload.pull_request.user.login];
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              assignees: assignees
+            })
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
