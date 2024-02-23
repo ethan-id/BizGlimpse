@@ -6,7 +6,8 @@
     "dev": "next dev & python3 ./api/app.py",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify": "next lint & npm audit"
   },
   "dependencies": {
     "@nextui-org/react": "^2.0.22",
@@ -24,7 +25,7 @@
     "intl-messageformat": "^10.1.0",
     "next": "^13.5.6",
     "next-themes": "^0.2.1",
-    "postcss": "8.4.27",
+    "postcss": "^8.4.35",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwind-variants": "^0.1.13",
