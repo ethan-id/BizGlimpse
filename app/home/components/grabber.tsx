@@ -58,7 +58,7 @@ export const Grabber = () => {
             {loading && !error && <Progress
                 size="sm"
                 isIndeterminate
-                aria-label="Loading..."
+                label="Loading..."
                 className="max-w-md m-auto mt-12"
             />}
 
