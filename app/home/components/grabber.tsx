@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { StockData } from '@/types';
 import { Stock } from './stock';
+import { signOut, useSession } from 'next-auth/react';
 import { MyParticles } from './particles'; // Fix: Change the import statement to match the actual filename in a case-sensitive manner.
 import {
     Input,
     Button,
+    ButtonGroup,
     Progress
 } from '@nextui-org/react';
 
@@ -14,6 +16,7 @@ export const Grabber = () => {
     const [stockData, setStockData] = useState<StockData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { data: session } = useSession();
 
     const fetchStockData = async () => {
         setLoading(true);
@@ -39,6 +42,12 @@ export const Grabber = () => {
     return (
         <div className='flex flex-col'>
             <MyParticles/>
+            {session && <div className='absolute top-10 right-10 z-10 flex items-center'>
+                <p className='text-sm pr-4'>Signed in as {session.user?.email}</p>
+                <ButtonGroup>
+                   <Button onClick={() => signOut()}>Sign out</Button>
+                </ButtonGroup>
+            </div>}
             <div className='flex flex-row gap-4 m-auto'>
                 <Input
                     type="text"
