@@ -11,11 +11,14 @@ import {
 import { CandlestickData } from 'lightweight-charts';
 import { getAnalysisReport } from '../utils/grabber-utils';
 import { UserInfo } from './UserInfo';
+import CandlestickChart from './CandlestickChart';
+import VolumeHistogram from './VolumeHistogram';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
     const [stockData, setStockData] = useState<StockData | null>(null);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
+    const [volumeData, setVolumeData] = useState<{ time: string | number; value: number }[] | undefined>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
@@ -57,7 +60,9 @@ export const Grabber = () => {
                     variant="ghost"
                     onClick={async () => {
                         scrapeStockData();
-                        setCandlestickData(await getAnalysisReport(ticker));
+                        const report = await getAnalysisReport(ticker);
+                        setCandlestickData(report?.candlestickData);
+                        setVolumeData(report?.volumeData);
                     }}
                 >
                     Scrape!
@@ -73,7 +78,12 @@ export const Grabber = () => {
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            {!error && stockData && candlestickData && <Stock stockData={stockData} candlestickData={candlestickData}/>}
+            {!error && stockData && candlestickData && <Stock stockData={stockData}/>}
+
+            {!error && stockData && candlestickData && volumeData && <div className='grid grid-cols-2 gap-4 width-[1290px]'>
+                <CandlestickChart data={candlestickData}/>
+                <VolumeHistogram data={volumeData}/>
+            </div>}
         </div>
     );
 }

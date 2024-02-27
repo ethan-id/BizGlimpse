@@ -1,6 +1,11 @@
 import { CandlestickData } from 'lightweight-charts';
 
-export const getAnalysisReport = async (ticker: string): Promise<CandlestickData[] | undefined> => {
+interface AnalysisReport {
+    candlestickData: CandlestickData[];
+    volumeData: { time: string | number; value: number }[];
+}
+
+export const getAnalysisReport = async (ticker: string): Promise<AnalysisReport | undefined> => {
     const axios = require('axios');
     const options = {
         method: 'GET',
@@ -15,22 +20,29 @@ export const getAnalysisReport = async (ticker: string): Promise<CandlestickData
             'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com'
         }
     };
-  
+
     try {
         const response = await axios.request(options);
         const responseData = response.data.body;
-        const chartData: CandlestickData[] = Object.keys(responseData).map((key) => {
-            const { open, high, low, close, date_utc } = responseData[key];
-            return {
+        const candlestickData: CandlestickData[] = [];
+        const volumeData: { time: string | number; value: number }[] = [];
+
+        Object.keys(responseData).forEach((key) => {
+            const { open, high, low, close, volume, date_utc } = responseData[key];
+            candlestickData.push({
                 time: date_utc,
                 open,
                 high,
                 low,
                 close
-            };
+            });
+            volumeData.push({
+                time: date_utc,
+                value: volume
+            });
         });
 
-        return chartData;
+        return { candlestickData, volumeData };
     } catch (error) {
         console.error(error);
         return undefined;
