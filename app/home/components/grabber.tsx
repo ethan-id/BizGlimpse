@@ -3,26 +3,25 @@ import React, { useState } from 'react';
 import { StockData } from '@/types';
 import { Stock } from './stock';
 import { signOut, useSession } from 'next-auth/react';
-import { MyParticles } from './particles'; // Fix: Change the import statement to match the actual filename in a case-sensitive manner.
 import {
     Input,
     Button,
     ButtonGroup,
     Progress,
-    Avatar
+    User
 } from '@nextui-org/react';
 import { CandlestickData } from 'lightweight-charts';
+import { getAnalysisReport } from '../utils/grabber-utils';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
     const [stockData, setStockData] = useState<StockData | null>(null);
-    const [candlestickData, setCandlestickData] = useState<CandlestickData[]>([]);
+    const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
-    const axios = require('axios');
 
-    const fetchStockData = async () => {
+    const scrapeStockData = async () => {
         setLoading(true);
         setError(null);
 
@@ -43,49 +42,20 @@ export const Grabber = () => {
         }
     };
 
-    const getAnalysisReport = async (ticker: string) => {
-        const options = {
-            method: 'GET',
-            url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history',
-            params: {
-                    symbol: ticker,
-                    interval: '1d',
-                    diffandsplits: 'false',
-            },
-            headers: {
-                    'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-                    'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com',
-            }
-        };
-      
-        try {
-            const response = await axios.request(options);
-            const responseData = response.data.body;
-            const chartData: CandlestickData[] = Object.keys(responseData).map((key) => {
-                const { open, high, low, close, date_utc } = responseData[key];
-                return {
-                    time: date_utc, // Assuming the 'date' is in the format 'YYYY-MM-DD' required by the chart library
-                    open,
-                    high,
-                    low,
-                    close,
-                };
-            });
-
-            setCandlestickData(chartData);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     return (
         <div className='flex flex-col'>
-            <MyParticles/>
-            {session && <div className='absolute top-10 right-10 z-10 flex items-center'>
-                <ButtonGroup>
+            {session && <div>
+                <ButtonGroup className='absolute top-10 right-10 z-10 flex items-center'>
                    <Button onClick={() => signOut()}>Sign out</Button>
                 </ButtonGroup>
-                <Avatar className='ml-4' src={session.user?.image as string}/>
+                <User
+                    avatarProps={{
+                        src: session.user?.image as string,
+                    }}
+                    className='absolute top-10 left-10 ml-4'
+                    description={session.user?.email}
+                    name={session.user?.name }
+                />
             </div>}
             <div className='flex flex-row gap-4 m-auto'>
                 <Input
@@ -97,9 +67,9 @@ export const Grabber = () => {
                 <Button 
                     color="primary"
                     variant="ghost"
-                    onClick={() => {
-                        fetchStockData();
-                        getAnalysisReport(ticker);
+                    onClick={async () => {
+                        scrapeStockData();
+                        setCandlestickData(await getAnalysisReport(ticker));
                     }}
                 >
                     Scrape!
