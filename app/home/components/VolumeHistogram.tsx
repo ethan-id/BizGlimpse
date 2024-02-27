@@ -1,16 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, CandlestickSeriesPartialOptions, CandlestickData, DeepPartial } from 'lightweight-charts';
+import { createChart, IChartApi, HistogramSeriesPartialOptions, SeriesDataItemTypeMap, DeepPartial } from 'lightweight-charts';
 
-interface CandlestickChartProps {
-    data: CandlestickData[];
-    chartOptions?: DeepPartial<CandlestickSeriesPartialOptions>;
+interface VolumeHistogramProps {
+    data: SeriesDataItemTypeMap['Histogram'][]; // Update the data type to match histogram data requirements
+    chartOptions?: DeepPartial<HistogramSeriesPartialOptions>;
 }
 
-const CandlestickChart = ({ data, chartOptions }: CandlestickChartProps) => {
+const VolumeHistogram = ({ data, chartOptions }: VolumeHistogramProps) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
 
-    // Initialize chart
     useEffect(() => {
         if (chartContainerRef.current) {
             chartRef.current = createChart(chartContainerRef.current, {
@@ -29,43 +28,35 @@ const CandlestickChart = ({ data, chartOptions }: CandlestickChartProps) => {
                     horzLines: {
                         color: '#404040'
                     }
+                },
+                rightPriceScale: {
+                    scaleMargins: {
+                        top: 0.2,
+                        bottom: 0
+                    }
                 }
             });
+
+            const series = chartRef.current.addHistogramSeries({
+                color: '#26a69a',
+                ...chartOptions
+            });
+
+            series.setData(data);
 
             return () => {
                 chartRef.current?.remove();
                 chartRef.current = null;
             };
         }
-    }, []);
-
-    // Update chart data and options
-    useEffect(() => {
-        if (!chartRef.current) return;
-
-        const series = chartRef.current.addCandlestickSeries({
-            upColor: '#4BFFB5',
-            downColor: '#FF4976',
-            borderDownColor: '#FF4976',
-            borderUpColor: '#4BFFB5',
-            wickDownColor: '#838CA1',
-            wickUpColor: '#838CA1',
-            ...chartOptions,
-        });
-
-        series.setData(data);
-
-        return () => {
-            chartRef.current?.removeSeries(series);
-        };
     }, [data, chartOptions]);
 
     return (
-        <div className=''>
-            <div className='m-4 text-4xl font-bold relative'>History</div>
+        <div className='flex-1'>
+            <div className='m-4 text-4xl font-bold relative'>Volume</div>
             <div className='relative' ref={chartContainerRef} />
         </div>
     );
 };
 
-export default CandlestickChart;
+export default VolumeHistogram;

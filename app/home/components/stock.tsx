@@ -1,15 +1,12 @@
 import { StockData } from '@/types';
 import React from 'react';
 import { Tabs, Tab, Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from '@nextui-org/react';
-import CandlestickChart from './CandlestickChart';
-import { CandlestickData } from 'lightweight-charts';
 
 type StockProps = {
     stockData: StockData | null;
-    candlestickData: CandlestickData[];
 };
 
-export const Stock = ({stockData, candlestickData}: StockProps) => {
+export const Stock = ({stockData}: StockProps) => {
     const basicInfoColumns = [
         { key: 'ticker', label: 'Ticker' },
         { key: 'open_value', label: 'Open Value' },
@@ -62,8 +59,6 @@ export const Stock = ({stockData, candlestickData}: StockProps) => {
                 </Tab>
             ))}
             </Tabs>
-
-            <CandlestickChart data={candlestickData}/>
         </div>
     )
 };
