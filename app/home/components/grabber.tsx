@@ -8,7 +8,8 @@ import {
     Input,
     Button,
     ButtonGroup,
-    Progress
+    Progress,
+    Avatar
 } from '@nextui-org/react';
 import { CandlestickData } from 'lightweight-charts';
 
@@ -81,10 +82,10 @@ export const Grabber = () => {
         <div className='flex flex-col'>
             <MyParticles/>
             {session && <div className='absolute top-10 right-10 z-10 flex items-center'>
-                <p className='text-sm pr-4'>Signed in as {session.user?.email}</p>
                 <ButtonGroup>
                    <Button onClick={() => signOut()}>Sign out</Button>
                 </ButtonGroup>
+                <Avatar className='ml-4' src={session.user?.image as string}/>
             </div>}
             <div className='flex flex-row gap-4 m-auto'>
                 <Input
