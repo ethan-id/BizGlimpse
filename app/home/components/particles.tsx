@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import {
-  type Container,
   type ISourceOptions
 } from '@tsparticles/engine';
 // import { loadAll } from '@/tsparticles/all'; // if you are going to use `loadAll`, install the '@tsparticles/all' package too.
@@ -26,10 +25,6 @@ export const MyParticles = () => {
       setInit(true);
     });
   }, []);
-
-  const particlesLoaded = async (container?: Container): Promise<void> => {
-    console.log(container);
-  };
 
   const options: ISourceOptions = useMemo(
     () => ({
@@ -102,7 +97,7 @@ export const MyParticles = () => {
     return (
       <Particles
         id='tsparticles'
-        particlesLoaded={particlesLoaded}
+        particlesLoaded={() => new Promise(resolve => setTimeout(resolve, 100))}
         options={options}
       />
     );

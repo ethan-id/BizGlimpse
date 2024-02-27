@@ -1,34 +1,15 @@
 import { StockData } from '@/types';
 import React from 'react';
 import { Tabs, Tab, Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from '@nextui-org/react';
-import BarChart from './BarChart';
+import CandlestickChart from './CandlestickChart';
+import { CandlestickData } from 'lightweight-charts';
 
 type StockProps = {
     stockData: StockData | null;
+    candlestickData: CandlestickData[];
 };
 
-export const Stock: React.FC<StockProps> = ({stockData}) => {
-    const chartData = {
-        labels: ['Open Value', 'Previous Close', 'Regular Market Price', 'Volume'],
-        datasets: [
-            {
-                label: `${stockData?.ticker} Data`,
-                data: [
-                    stockData?.open_value ? parseFloat(stockData.open_value) : 0,
-                    stockData?.previous_close ? parseFloat(stockData.previous_close) : 0,
-                    stockData?.regular_market_price ? parseFloat(stockData.regular_market_price) : 0,
-                    stockData?.volume ? parseFloat(stockData.volume.replace(/,/g, '')) / 1_000_000 : 0 // Convert volume to millions for better scale in chart
-                ],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ],
-            },
-        ],
-    };
-
+export const Stock = ({stockData, candlestickData}: StockProps) => {
     const basicInfoColumns = [
         { key: 'ticker', label: 'Ticker' },
         { key: 'open_value', label: 'Open Value' },
@@ -73,7 +54,7 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
                             {(item) => {
                                 return (
                                 <TableRow key={item?.ticker}>
-                                    {(columnKey) => <TableCell className='text-medium'>{item != null ? item[columnKey as keyof StockData] : null}</TableCell>}
+                                    {(columnKey) => <TableCell className='text-medium'>{item != null ? String(item[columnKey as keyof StockData]) : null}</TableCell>}
                                 </TableRow>
                             )}}
                         </TableBody>
@@ -81,7 +62,8 @@ export const Stock: React.FC<StockProps> = ({stockData}) => {
                 </Tab>
             ))}
             </Tabs>
-            <BarChart data={chartData}/>
+
+            <CandlestickChart data={candlestickData}/>
         </div>
     )
 };
