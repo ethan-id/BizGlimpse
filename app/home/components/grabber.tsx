@@ -11,13 +11,16 @@ import {
     Progress,
     Avatar
 } from '@nextui-org/react';
+import { CandlestickData } from 'lightweight-charts';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
     const [stockData, setStockData] = useState<StockData | null>(null);
+    const [candlestickData, setCandlestickData] = useState<CandlestickData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
+    const axios = require('axios');
 
     const fetchStockData = async () => {
         setLoading(true);
@@ -40,6 +43,41 @@ export const Grabber = () => {
         }
     };
 
+    const getAnalysisReport = async (ticker: string) => {
+        const options = {
+            method: 'GET',
+            url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history',
+            params: {
+                    symbol: ticker,
+                    interval: '1d',
+                    diffandsplits: 'false',
+            },
+            headers: {
+                    'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com',
+            }
+        };
+      
+        try {
+            const response = await axios.request(options);
+            const responseData = response.data.body;
+            const chartData: CandlestickData[] = Object.keys(responseData).map((key) => {
+                const { open, high, low, close, date_utc } = responseData[key];
+                return {
+                    time: date_utc, // Assuming the 'date' is in the format 'YYYY-MM-DD' required by the chart library
+                    open,
+                    high,
+                    low,
+                    close,
+                };
+            });
+
+            setCandlestickData(chartData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div className='flex flex-col'>
             <MyParticles/>
@@ -59,7 +97,10 @@ export const Grabber = () => {
                 <Button 
                     color="primary"
                     variant="ghost"
-                    onClick={fetchStockData}
+                    onClick={() => {
+                        fetchStockData();
+                        getAnalysisReport(ticker);
+                    }}
                 >
                     Scrape!
                 </Button>
@@ -74,7 +115,7 @@ export const Grabber = () => {
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            {!error && stockData && <Stock stockData={stockData}/>}
+            {!error && stockData && candlestickData && <Stock stockData={stockData} candlestickData={candlestickData}/>}
         </div>
     );
 }

@@ -4,6 +4,45 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+type History = {
+  meta: Meta;
+  body: { [key: string]: Body };
+}
+
+export interface Body {
+    date: string;
+    date_utc: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume: number;
+    adjclose: number;
+}
+
+export interface Meta {
+    processedTime: Date;
+    currency: string;
+    symbol: string;
+    exchangeName: string;
+    instrumentType:string;
+    firstTradeDate: number;
+    regularMarketTime: number;
+    hasPrePostMarketData: boolean;
+    gmtoffset: number;
+    timezone: string;
+    exchangeTimezoneName: string;
+    regularMarketPrice: number;
+    chartPreviousClose: number;
+    priceHint: number;
+    dataGranularity: string;
+    range: string;
+    version: string;
+    status: number;
+    copywrite: string;
+}
+
+
 export type StockData = {
     ask: string;
     avg_volume: string;
@@ -25,4 +64,5 @@ export type StockData = {
     volume: string;
     week_range: string;
     year_target_est: string;
+    history: History;
 }
