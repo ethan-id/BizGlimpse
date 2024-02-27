@@ -2,16 +2,15 @@
 import React, { useState } from 'react';
 import { StockData } from '@/types';
 import { Stock } from './stock';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import {
     Input,
     Button,
-    ButtonGroup,
-    Progress,
-    User
+    Progress
 } from '@nextui-org/react';
 import { CandlestickData } from 'lightweight-charts';
 import { getAnalysisReport } from '../utils/grabber-utils';
+import { UserInfo } from './UserInfo';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
@@ -44,19 +43,8 @@ export const Grabber = () => {
 
     return (
         <div className='flex flex-col'>
-            {session && <div>
-                <ButtonGroup className='absolute top-10 right-10 z-10 flex items-center'>
-                   <Button onClick={() => signOut()}>Sign out</Button>
-                </ButtonGroup>
-                <User
-                    avatarProps={{
-                        src: session.user?.image as string,
-                    }}
-                    className='absolute top-10 left-10 ml-4'
-                    description={session.user?.email}
-                    name={session.user?.name }
-                />
-            </div>}
+            {session && <UserInfo/>}
+            
             <div className='flex flex-row gap-4 m-auto'>
                 <Input
                     type="text"
