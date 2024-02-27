@@ -1,8 +1,9 @@
 'use client';
 
 import {Grabber} from '@/app/home/components/grabber';
-import { Button, ButtonGroup } from '@nextui-org/react';
-import { signIn, useSession } from 'next-auth/react';
+import {MyParticles} from '@/app/home/components/particles';
+import {Button, ButtonGroup} from '@nextui-org/react';
+import {signIn, useSession} from 'next-auth/react';
 
 export default function Home() {
 	const { data: session } = useSession();
@@ -11,7 +12,10 @@ export default function Home() {
 
 	return (
 		<section className='flex flex-col items-center text-6xl justify-center'>
-			{session ? <Grabber/> : (
+			{session ? <>
+				<MyParticles/>
+				<Grabber/>
+			</> : (
 				<ButtonGroup className='flex justify-center items-center h-[80vh]'>
 					<Button onClick={() => signIn('github')}>
 						Sign in with GitHub

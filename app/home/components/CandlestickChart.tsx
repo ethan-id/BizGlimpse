@@ -1,41 +1,71 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, ISeriesApi, DeepPartial, CandlestickSeriesPartialOptions, CandlestickData } from 'lightweight-charts';
+import { createChart, IChartApi, CandlestickSeriesPartialOptions, CandlestickData, DeepPartial } from 'lightweight-charts';
 
 interface CandlestickChartProps {
-  data: CandlestickData[];
-  chartOptions?: DeepPartial<CandlestickSeriesPartialOptions>;
+    data: CandlestickData[];
+    chartOptions?: DeepPartial<CandlestickSeriesPartialOptions>;
 }
 
-const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions }) => {
-  const chartContainerRef = useRef<HTMLDivElement>(null);
-  let chart: IChartApi | null = null;
-  let candleSeries: ISeriesApi<'Candlestick'> | null = null;
+const CandlestickChart = ({ data, chartOptions }: CandlestickChartProps) => {
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartRef = useRef<IChartApi | null>(null);
 
-  useEffect(() => {
-    if (chartContainerRef.current) {
-      chart = createChart(chartContainerRef.current, { width: chartContainerRef.current.clientWidth, height: 300 });
-      candleSeries = chart.addCandlestickSeries(chartOptions);
+    // Initialize chart
+    useEffect(() => {
+        if (chartContainerRef.current) {
+            chartRef.current = createChart(chartContainerRef.current, {
+                    width: chartContainerRef.current.clientWidth,
+                    height: 300,
+                    layout: {
+                        background: {
+                            color: '#2B2B43'
+                        },
+                        textColor: '#D9D9D9',
+                    },
+                    grid: {
+                        vertLines: {
+                            color: '#404040',
+                        },
+                        horzLines: {
+                            color: '#404040',
+                        },
+                    },
+            });
 
-      candleSeries.setData(data);
+            return () => {
+                chartRef.current?.remove();
+                chartRef.current = null;
+            };
+        }
+    }, []);
 
-      window.addEventListener('resize', resizeChart);
-    }
+    // Update chart data and options
+    useEffect(() => {
+        if (!chartRef.current) return;
 
-    return () => {
-      window.removeEventListener('resize', resizeChart);
-      if (chart !== null) {
-        chart.remove();
-      }
-    };
+        const series = chartRef.current.addCandlestickSeries({
+            upColor: '#4BFFB5',
+            downColor: '#FF4976',
+            borderDownColor: '#FF4976',
+            borderUpColor: '#4BFFB5',
+            wickDownColor: '#838CA1',
+            wickUpColor: '#838CA1',
+            ...chartOptions,
+        });
 
-    function resizeChart() {
-      if (chartContainerRef.current) {
-        chart?.applyOptions({ width: chartContainerRef.current.clientWidth });
-      }
-    }
-  }, []);
+        series.setData(data);
 
-  return <div ref={chartContainerRef} />;
+        return () => {
+            chartRef.current?.removeSeries(series);
+        };
+    }, [data, chartOptions]);
+
+    return (
+        <div className='shadow-lg'>
+            <div className='m-4 text-4xl font-bold relative'>History</div>
+            <div className='relative' ref={chartContainerRef} />
+        </div>
+    );
 };
 
 export default CandlestickChart;
