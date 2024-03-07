@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart, IChartApi, HistogramSeriesPartialOptions, SeriesDataItemTypeMap, DeepPartial } from 'lightweight-charts';
 
 interface VolumeHistogramProps {
@@ -9,12 +9,13 @@ interface VolumeHistogramProps {
 const VolumeHistogram = ({ data, chartOptions }: VolumeHistogramProps) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
+    const [, setSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
         if (chartContainerRef.current) {
             chartRef.current = createChart(chartContainerRef.current, {
                 width: chartContainerRef.current.clientWidth,
-                height: 300,
+                height: 300, // Initial height, you might want to calculate this dynamically
                 layout: {
                     background: {
                         color: '#2B2B43'
@@ -37,25 +38,52 @@ const VolumeHistogram = ({ data, chartOptions }: VolumeHistogramProps) => {
                 }
             });
 
-            const series = chartRef.current.addHistogramSeries({
-                color: '#26a69a',
-                ...chartOptions
-            });
+            const handleResize = () => {
+                // Trigger rerender to update width and height
+                setSize({
+                    width: chartContainerRef.current?.clientWidth || 0,
+                    height: chartContainerRef.current?.clientHeight || 300 // Adjust as necessary
+                });
 
-            series.setData(data);
+                // Update chart size
+                chartRef.current?.applyOptions({
+                    width: chartContainerRef.current?.clientWidth,
+                    height: 300 // Or another dynamic height calculation
+                });
+            };
 
+            // Add resize event listener
+            window.addEventListener('resize', handleResize);
+
+            // Clean up
             return () => {
+                window.removeEventListener('resize', handleResize);
                 chartRef.current?.remove();
                 chartRef.current = null;
             };
         }
+    }, []);
+
+    useEffect(() => {
+        if (!chartRef.current) return;
+
+        const series = chartRef.current.addHistogramSeries({
+            color: '#26a69a',
+            ...chartOptions
+        });
+
+        series.setData(data);
+
+        return () => {
+            chartRef.current?.removeSeries(series);
+        };
     }, [data, chartOptions]);
 
     return (
-        <div className='flex-1'>
-            <div className='m-4 text-4xl font-bold relative'>Volume</div>
+        <section>
+            <div className='m-4 text-2xl font-bold relative'>Volume</div>
             <div className='relative' ref={chartContainerRef} />
-        </div>
+        </section>
     );
 };
 

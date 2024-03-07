@@ -34,13 +34,13 @@ export const Stock = ({stockData}: StockProps) => {
     ];
 
     return (
-        <div>
-            <Tabs>
+        <div className='flex flex-col justify-center md:mx-56'>
+            <Tabs className='flex justify-center mt-8'>
             {[
                 { title: 'Basic Information', columns: basicInfoColumns },
                 { title: 'Performance', columns: performanceColumns },
                 { title: 'Trading Information', columns: tradingInfoColumns },
-                { title: 'Key Metrics', columns: keyMetricsColumns },
+                { title: 'Key Metrics', columns: keyMetricsColumns }
             ].map(tableInfo => (
                 <Tab className='text-xl p-6' key={tableInfo.title} title={tableInfo.title}>
                     <Table aria-label={`${tableInfo.title} table with dynamic content`}>
