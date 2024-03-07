@@ -1,9 +1,9 @@
 {
-  "name": "live-scrape-api",
+  "name": "biz-glimpse",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev & python3 ./api/app.py",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

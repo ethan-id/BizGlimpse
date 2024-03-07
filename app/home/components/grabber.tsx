@@ -1,7 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { StockData } from '@/types';
-import { Stock } from './stock';
 import { useSession } from 'next-auth/react';
 import {
     Input,
@@ -22,36 +20,14 @@ import CompanyCard from './CompanyCard';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
-    const [stockData, setStockData] = useState<StockData | null>(null);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
     const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
     const [earningsData, setEarningsData] = useState<QuarterlyEarningsChartProps['data'] | undefined>([]);
     const [ownershipData, setOwnershipData] = useState<OwnershipData>();
     const [profileData, setProfileData] = useState<CompanyCardProps>();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const { data: session } = useSession();
-
-    const scrapeStockData = async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await fetch(`http://localhost:5000/scrape/${ticker}`);
-            const data = await response.json();
-
-            if (response.ok) {
-                setStockData(data);
-            } else {
-                console.log('error')
-                setError(data.message || 'An error occurred');
-            }
-        } catch (err: any) {
-            setError(err.message || 'An unexpected error occurred');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className=''>
@@ -68,20 +44,26 @@ export const Grabber = () => {
                     color='primary'
                     variant='ghost'
                     onClick={async () => {
-                        scrapeStockData();
-                        const report = await getAnalysisReport(ticker);
-                        const earnings = await getEarningsReport(ticker);
-                        const ownerData = await getOwnershipData(ticker);
-                        const companyData = await getCompanyCardData(ticker);
-
-                        setProfileData(companyData);
-                        setOwnershipData(ownerData);
-                        setEarningsData(earnings?.data);
-                        setCandlestickData(report?.candlestickData);
-                        setVolumeData(report?.volumeData);
+                        try {
+                            setLoading(true);
+                            const report = await getAnalysisReport(ticker);
+                            const earnings = await getEarningsReport(ticker);
+                            const ownerData = await getOwnershipData(ticker);
+                            const companyData = await getCompanyCardData(ticker);
+    
+                            setProfileData(companyData);
+                            setOwnershipData(ownerData);
+                            setEarningsData(earnings?.data);
+                            setCandlestickData(report?.candlestickData);
+                            setVolumeData(report?.volumeData);
+                            setLoading(false);
+                        } catch (error) {
+                            setError('An error occurred while fetching data. Please try again later.');
+                            setLoading(false);
+                        }
                     }}
                 >
-                    Scrape!
+                    Search!
                 </Button>
             </div>
 
@@ -94,9 +76,7 @@ export const Grabber = () => {
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            {!error && stockData && candlestickData && <Stock stockData={stockData}/>}
-
-            {!error && stockData && candlestickData && volumeData && ownershipData && earningsData && profileData &&
+            {!error && candlestickData && volumeData && ownershipData && earningsData && profileData &&
                 <div className='grid grid-cols-3 gap-4 width-[1290px] my-10'>
                     <CompanyCard assetProfile={profileData.assetProfile}/>
                     <CandlestickChart data={candlestickData}/>
