@@ -8,7 +8,7 @@
   <img width="125" src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" alt="Python Logo"/>
 </p>
 <p align='center'>
-  NextJS App with Flask backend for scraping Yahoo Finance
+  NextJS App that displays stock and company info using a webscraping driven Flask API and the <a href="https://rapidapi.com/sparior/api/yahoo-finance15">Yahoo Finance API</a>
 </p>
 
 ## Next.js & NextUI Template
