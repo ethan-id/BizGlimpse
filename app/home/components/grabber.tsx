@@ -53,21 +53,6 @@ export const Grabber = () => {
         }
     };
 
-    // const assetProfileData = {
-    //     address1: 'One Apple Park Way',
-    //     city: 'Cupertino',
-    //     state: 'CA',
-    //     zip: '95014',
-    //     country: 'United States',
-    //     phone: '408-996-1010',
-    //     website: 'http://www.apple.com',
-    //     industry: 'Consumer Electronics',
-    //     sector: 'Technology',
-    //     longBusinessSummary: 'Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services...',
-    //     fullTimeEmployees: 137000,
-    // };
-
-
     return (
         <div className=''>
             {session && <UserInfo/>}
@@ -88,7 +73,7 @@ export const Grabber = () => {
                         const earnings = await getEarningsReport(ticker);
                         const ownerData = await getOwnershipData(ticker);
                         const companyData = await getCompanyCardData(ticker);
-                        console.log(companyData);
+
                         setProfileData(companyData);
                         setOwnershipData(ownerData);
                         setEarningsData(earnings?.data);
