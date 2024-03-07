@@ -17,6 +17,7 @@ export default NextAuth({
   session: {
     strategy: 'jwt',
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token }: { session: Session; token: any }) {
       // Send properties to the client, like an access_token from a provider
