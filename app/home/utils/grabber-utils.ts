@@ -1,6 +1,7 @@
 import { CandlestickData, HistogramData } from 'lightweight-charts';
 import { QuarterlyEarningsChartProps } from '../components/charts/QuarterlyEarningsChart';
 import { OwnershipData } from '../components/types/charts/OwnershipChartTypes';
+import { CompanyCardProps } from '../components/types/CompanyCard';
 
 interface AnalysisReport {
     candlestickData: CandlestickData[];
@@ -109,7 +110,7 @@ export const getOwnershipData = async (symbol: string): Promise<OwnershipData | 
     }
 };
 
-export const getCompanyCardData = async (symbol: string): Promise<OwnershipData | undefined> => {
+export const getCompanyCardData = async (symbol: string): Promise<CompanyCardProps | undefined> => {
     const axios = require('axios');
 
     const options = {
@@ -117,7 +118,7 @@ export const getCompanyCardData = async (symbol: string): Promise<OwnershipData 
         url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/modules',
         params: {
             ticker: symbol,
-            module: 'institution-ownership'
+            module: 'asset-profile'
         },
         headers: {
             'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
@@ -128,7 +129,7 @@ export const getCompanyCardData = async (symbol: string): Promise<OwnershipData 
     try {
         const response = await axios.request(options);
 
-        return { data: response.data.body };
+        return { assetProfile: response.data.body };
     } catch (error) {
         console.error(error);
         return undefined;
