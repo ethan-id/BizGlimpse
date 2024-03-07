@@ -11,7 +11,8 @@ import {
 import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
 import { OwnershipData } from './types/charts/OwnershipChartTypes';
 import { CandlestickData, HistogramData } from 'lightweight-charts';
-import { getAnalysisReport, getEarningsReport, getOwnershipData } from '../utils/grabber-utils';
+import { CompanyCardProps } from './types/CompanyCard';
+import { getAnalysisReport, getCompanyCardData, getEarningsReport, getOwnershipData } from '../utils/grabber-utils';
 import { UserInfo } from './UserInfo';
 import CandlestickChart from './charts/CandlestickChart';
 import VolumeHistogram from './charts/VolumeHistogram';
@@ -26,6 +27,7 @@ export const Grabber = () => {
     const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
     const [earningsData, setEarningsData] = useState<QuarterlyEarningsChartProps['data'] | undefined>([]);
     const [ownershipData, setOwnershipData] = useState<OwnershipData>();
+    const [profileData, setProfileData] = useState<CompanyCardProps>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
@@ -51,21 +53,6 @@ export const Grabber = () => {
         }
     };
 
-    const assetProfileData = {
-        address1: 'One Apple Park Way',
-        city: 'Cupertino',
-        state: 'CA',
-        zip: '95014',
-        country: 'United States',
-        phone: '408-996-1010',
-        website: 'http://www.apple.com',
-        industry: 'Consumer Electronics',
-        sector: 'Technology',
-        longBusinessSummary: 'Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services...',
-        fullTimeEmployees: 137000,
-    };
-
-
     return (
         <div className=''>
             {session && <UserInfo/>}
@@ -85,7 +72,9 @@ export const Grabber = () => {
                         const report = await getAnalysisReport(ticker);
                         const earnings = await getEarningsReport(ticker);
                         const ownerData = await getOwnershipData(ticker);
-                        console.log(ownerData);
+                        const companyData = await getCompanyCardData(ticker);
+
+                        setProfileData(companyData);
                         setOwnershipData(ownerData);
                         setEarningsData(earnings?.data);
                         setCandlestickData(report?.candlestickData);
@@ -107,9 +96,9 @@ export const Grabber = () => {
 
             {!error && stockData && candlestickData && <Stock stockData={stockData}/>}
 
-            {!error && stockData && candlestickData && volumeData && ownershipData && earningsData && 
+            {!error && stockData && candlestickData && volumeData && ownershipData && earningsData && profileData &&
                 <div className='grid grid-cols-3 gap-4 width-[1290px] my-10'>
-                    <CompanyCard assetProfile={assetProfileData}/>
+                    <CompanyCard assetProfile={profileData.assetProfile}/>
                     <CandlestickChart data={candlestickData}/>
                     <OwnershipChart data={ownershipData.data}/>
                     <VolumeHistogram data={volumeData}/>
