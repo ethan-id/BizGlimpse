@@ -9,12 +9,15 @@ import {
     Progress
 } from '@nextui-org/react';
 import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
+import { OwnershipData } from './types/charts/OwnershipChartTypes';
 import { CandlestickData, HistogramData } from 'lightweight-charts';
-import { getAnalysisReport, getEarningsReport } from '../utils/grabber-utils';
+import { getAnalysisReport, getEarningsReport, getOwnershipData } from '../utils/grabber-utils';
 import { UserInfo } from './UserInfo';
 import CandlestickChart from './charts/CandlestickChart';
 import VolumeHistogram from './charts/VolumeHistogram';
 import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
+import OwnershipChart from './charts/OwnershipChart';
+import CompanyCard from './CompanyCard';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
@@ -22,6 +25,7 @@ export const Grabber = () => {
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
     const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
     const [earningsData, setEarningsData] = useState<QuarterlyEarningsChartProps['data'] | undefined>([]);
+    const [ownershipData, setOwnershipData] = useState<OwnershipData>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
@@ -47,24 +51,42 @@ export const Grabber = () => {
         }
     };
 
+    const assetProfileData = {
+        address1: 'One Apple Park Way',
+        city: 'Cupertino',
+        state: 'CA',
+        zip: '95014',
+        country: 'United States',
+        phone: '408-996-1010',
+        website: 'http://www.apple.com',
+        industry: 'Consumer Electronics',
+        sector: 'Technology',
+        longBusinessSummary: 'Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services...',
+        fullTimeEmployees: 137000,
+    };
+
+
     return (
         <div className=''>
             {session && <UserInfo/>}
             
             <div className='flex flex-row gap-4 m-auto w-64'>
                 <Input
-                    type="text"
+                    type='text'
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value)}
-                    placeholder="Enter stock ticker..."
+                    placeholder='Enter stock ticker...'
                 />
                 <Button 
-                    color="primary"
-                    variant="ghost"
+                    color='primary'
+                    variant='ghost'
                     onClick={async () => {
                         scrapeStockData();
                         const report = await getAnalysisReport(ticker);
                         const earnings = await getEarningsReport(ticker);
+                        const ownerData = await getOwnershipData(ticker);
+                        console.log(ownerData);
+                        setOwnershipData(ownerData);
                         setEarningsData(earnings?.data);
                         setCandlestickData(report?.candlestickData);
                         setVolumeData(report?.volumeData);
@@ -75,21 +97,25 @@ export const Grabber = () => {
             </div>
 
             {loading && !error && <Progress
-                size="sm"
+                size='sm'
                 isIndeterminate
-                label="Loading..."
-                className="max-w-md m-auto mt-12"
+                label='Loading...'
+                className='max-w-md m-auto mt-12'
             />}
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {!error && stockData && candlestickData && <Stock stockData={stockData}/>}
 
-            {!error && stockData && candlestickData && volumeData && earningsData && <div className='grid grid-cols-2 gap-4 width-[1290px] my-10'>
-                <CandlestickChart data={candlestickData}/>
-                <VolumeHistogram data={volumeData}/>
-                <QuarterlyEarningsChart data={earningsData}/>
-            </div>}
+            {!error && stockData && candlestickData && volumeData && ownershipData && earningsData && 
+                <div className='grid grid-cols-3 gap-4 width-[1290px] my-10'>
+                    <CompanyCard assetProfile={assetProfileData}/>
+                    <CandlestickChart data={candlestickData}/>
+                    <OwnershipChart data={ownershipData.data}/>
+                    <VolumeHistogram data={volumeData}/>
+                    <QuarterlyEarningsChart data={earningsData}/>
+                </div>
+            }
         </div>
     );
 }

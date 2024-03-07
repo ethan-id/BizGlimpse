@@ -88,7 +88,7 @@ const QuarterlyEarningsChart = ({ data }: QuarterlyEarningsChartProps) => {
     return (
         <section>
             <div className='m-4 text-2xl font-bold relative'>Earnings vs. Estimate (Quarterly)</div>
-            <div ref={chartContainerRef} />
+            <div className='relative' ref={chartContainerRef} />
         </section>    
     );
 };
