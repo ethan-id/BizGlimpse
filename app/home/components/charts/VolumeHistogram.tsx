@@ -80,7 +80,7 @@ const VolumeHistogram = ({ data, chartOptions }: VolumeHistogramProps) => {
     }, [data, chartOptions]);
 
     return (
-        <section>
+        <section className=''>
             <div className='m-4 text-2xl font-bold relative'>Volume</div>
             <div className='relative' ref={chartContainerRef} />
         </section>

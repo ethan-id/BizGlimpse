@@ -83,7 +83,7 @@ const CandlestickChart = ({ data, chartOptions }: CandlestickChartProps) => {
     }, [data, chartOptions]);
 
     return (
-        <section>
+        <section className='col-span-2 self-end'>
             <div className='m-4 text-2xl font-bold relative'>OHLC / Price History</div>
             <div className='relative' ref={chartContainerRef} />
         </section>

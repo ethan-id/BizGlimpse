@@ -1,5 +1,6 @@
 import { CandlestickData, HistogramData } from 'lightweight-charts';
 import { QuarterlyEarningsChartProps } from '../components/charts/QuarterlyEarningsChart';
+import { OwnershipData } from '../components/types/charts/OwnershipChartTypes';
 
 interface AnalysisReport {
     candlestickData: CandlestickData[];
@@ -76,6 +77,58 @@ export const getEarningsReport = async (symbol: string): Promise<{ data: Quarter
         }));
 
         return { data };
+    } catch (error) {
+        console.error(error);
+        return undefined;
+    }
+};
+
+export const getOwnershipData = async (symbol: string): Promise<OwnershipData | undefined> => {
+    const axios = require('axios');
+
+    const options = {
+        method: 'GET',
+        url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/modules',
+        params: {
+            ticker: symbol,
+            module: 'institution-ownership'
+        },
+        headers: {
+            'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+
+        return { data: response.data.body };
+    } catch (error) {
+        console.error(error);
+        return undefined;
+    }
+};
+
+export const getCompanyCardData = async (symbol: string): Promise<OwnershipData | undefined> => {
+    const axios = require('axios');
+
+    const options = {
+        method: 'GET',
+        url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/modules',
+        params: {
+            ticker: symbol,
+            module: 'institution-ownership'
+        },
+        headers: {
+            'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+
+        return { data: response.data.body };
     } catch (error) {
         console.error(error);
         return undefined;

@@ -17,7 +17,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.7",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.2",
     "clsx": "^2.0.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
@@ -29,6 +29,7 @@
     "next-themes": "^0.2.1",
     "postcss": "^8.4.35",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "tailwind-variants": "^0.1.13",
     "tailwindcss": "3.3.3"
