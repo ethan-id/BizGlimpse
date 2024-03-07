@@ -1,5 +1,10 @@
 import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
+import { Session } from 'next-auth';
+
+interface ExtendedSession extends Session {
+  accessToken?: string;
+}
 
 export default NextAuth({
   providers: [
@@ -13,10 +18,10 @@ export default NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: any }) {
       // Send properties to the client, like an access_token from a provider
-      session.accessToken = token.accessToken
-      return session
+      (session as ExtendedSession).accessToken = token.accessToken;
+      return session;
     }
   }
 });
