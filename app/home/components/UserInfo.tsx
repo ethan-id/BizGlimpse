@@ -11,14 +11,14 @@ export const UserInfo = () => {
     const {data: session} = useSession();
 
     return (session && <div>
-        <ButtonGroup className='absolute top-10 right-64 z-10 flex items-center'>
+        <ButtonGroup className='absolute top-10 right-20 z-10 flex items-center'>
             <Button onClick={() => signOut()}>Sign out</Button>
         </ButtonGroup>
         <User
             avatarProps={{
                 src: session.user?.image as string,
             }}
-            className='absolute top-10 left-64 ml-4'
+            className='absolute top-10 left-20 ml-4'
             description={session.user?.email}
             name={session.user?.name }
         />

@@ -11,7 +11,7 @@ export default function Home() {
 	console.log(session);
 
 	return (
-		<section className='flex items-center text-6xl justify-center'>
+		<section className=''>
 			{session ? <>
 				<MyParticles/>
 				<Grabber/>

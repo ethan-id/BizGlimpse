@@ -8,17 +8,20 @@ import {
     Button,
     Progress
 } from '@nextui-org/react';
-import { CandlestickData } from 'lightweight-charts';
-import { getAnalysisReport } from '../utils/grabber-utils';
+import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
+import { CandlestickData, HistogramData } from 'lightweight-charts';
+import { getAnalysisReport, getEarningsReport } from '../utils/grabber-utils';
 import { UserInfo } from './UserInfo';
-import CandlestickChart from './CandlestickChart';
-import VolumeHistogram from './VolumeHistogram';
+import CandlestickChart from './charts/CandlestickChart';
+import VolumeHistogram from './charts/VolumeHistogram';
+import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
 
 export const Grabber = () => {
     const [ticker, setTicker] = useState('');
     const [stockData, setStockData] = useState<StockData | null>(null);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
-    const [volumeData, setVolumeData] = useState<{ time: string | number; value: number }[] | undefined>([]);
+    const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
+    const [earningsData, setEarningsData] = useState<QuarterlyEarningsChartProps['data'] | undefined>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
@@ -45,10 +48,10 @@ export const Grabber = () => {
     };
 
     return (
-        <div className='flex flex-col'>
+        <div className=''>
             {session && <UserInfo/>}
             
-            <div className='flex flex-row gap-4 m-auto'>
+            <div className='flex flex-row gap-4 m-auto w-64'>
                 <Input
                     type="text"
                     value={ticker}
@@ -61,6 +64,8 @@ export const Grabber = () => {
                     onClick={async () => {
                         scrapeStockData();
                         const report = await getAnalysisReport(ticker);
+                        const earnings = await getEarningsReport(ticker);
+                        setEarningsData(earnings?.data);
                         setCandlestickData(report?.candlestickData);
                         setVolumeData(report?.volumeData);
                     }}
@@ -80,9 +85,10 @@ export const Grabber = () => {
 
             {!error && stockData && candlestickData && <Stock stockData={stockData}/>}
 
-            {!error && stockData && candlestickData && volumeData && <div className='grid grid-cols-2 gap-4 width-[1290px]'>
+            {!error && stockData && candlestickData && volumeData && earningsData && <div className='grid grid-cols-2 gap-4 width-[1290px] my-10'>
                 <CandlestickChart data={candlestickData}/>
                 <VolumeHistogram data={volumeData}/>
+                <QuarterlyEarningsChart data={earningsData}/>
             </div>}
         </div>
     );
