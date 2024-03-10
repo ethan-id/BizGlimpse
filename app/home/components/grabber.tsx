@@ -77,7 +77,7 @@ export const Grabber = () => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {!error && candlestickData && volumeData && ownershipData && earningsData && profileData &&
-                <div className='grid grid-cols-3 gap-4 width-[1290px] my-10'>
+                <div className='grid grid-cols-3 gap-4 width-[1290px] my-10 items center'>
                     <CompanyCard assetProfile={profileData.assetProfile}/>
                     <CandlestickChart data={candlestickData}/>
                     <OwnershipChart data={ownershipData.data}/>
