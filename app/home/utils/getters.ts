@@ -2,6 +2,7 @@ import { CandlestickData, HistogramData } from 'lightweight-charts';
 import { QuarterlyEarningsChartProps } from '../components/charts/QuarterlyEarningsChart';
 import { OwnershipData } from '../components/types/charts/OwnershipChartTypes';
 import { CompanyCardProps } from '../components/types/CompanyCard';
+import { ShareActivityData } from '../components/types/ShareActivityCard';
 
 interface AnalysisReport {
     candlestickData: CandlestickData[];
@@ -133,5 +134,30 @@ export const getCompanyCardData = async (symbol: string): Promise<CompanyCardPro
     } catch (error) {
         console.error(error);
         return undefined;
+    }
+};
+
+export const getShareActivityData = async (symbol: string): Promise<ShareActivityData | undefined> => {
+    const axios = require('axios');
+
+    const options = {
+        method: 'GET',
+        url: 'https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/modules',
+        params: {
+            ticker: symbol,
+            module: 'net-share-purchase-activity'
+        },
+        headers: {
+            'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        
+        return response.data.body;
+    } catch (error) {
+        console.error(error);
     }
 };
