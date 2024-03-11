@@ -1,6 +1,4 @@
-'use client';
-
-import {Grabber} from '@/app/home/components/grabber';
+import {HomePage} from '@/app/home/components/HomePage';
 import {MyParticles} from '@/app/home/components/particles';
 
 export default function Home() {
@@ -8,7 +6,7 @@ export default function Home() {
 	return (
 		<section>
 			<MyParticles/>
-			<Grabber/>
+			<HomePage/>
 		</section>
 	);
 }

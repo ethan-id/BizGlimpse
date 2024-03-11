@@ -6,7 +6,6 @@ import {
     User
 } from '@nextui-org/react';
 
-
 export const UserInfo = () => {
     const {data: session} = useSession();
 
