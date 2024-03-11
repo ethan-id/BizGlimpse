@@ -91,7 +91,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions 
                     SMA
                 </Switch>
             </div>
-            <div ref={chartContainerRef} />
+            <div className='relative' ref={chartContainerRef} />
         </section>
     );
 };

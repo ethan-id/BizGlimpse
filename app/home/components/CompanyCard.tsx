@@ -4,15 +4,15 @@ import {Card, CardBody, CardFooter, Link} from '@nextui-org/react';
 
 const CompanyCard = ({ assetProfile }: CompanyCardProps) => {
     return (
-        <Card className='max-w-lg overflow-hidden shadow-lg relative bg-[#2B2B43] text-white rounded-xl'>
-            <CardBody className='p-6'>
+        <Card className='max-w-lg overflow-hidden shadow-lg relative bg-grid-line text-white rounded-xl'>
+            <CardBody className='p-6 pb-0'>
                 <h4 className='mb-2 font-bold'>{assetProfile.industry}</h4>
-                <div className='text-base line-clamp-5'>
+                <div className='text-base line-clamp-6'>
                     {assetProfile.longBusinessSummary}
                 </div>
             </CardBody>
             <CardFooter className='px-6 pb-4 bg-grid-line'>
-                <div className='text-sm space-y-2'>
+                <div className='text-sm space-y-2 pr-4'>
                     <p>Sector: {assetProfile.sector}</p>
                     <p>Employees: {assetProfile.fullTimeEmployees.toLocaleString()}</p>
                     <p>
@@ -24,7 +24,7 @@ const CompanyCard = ({ assetProfile }: CompanyCardProps) => {
                     href={assetProfile.website} 
                     target='_blank' 
                     rel='noopener noreferrer'
-                    className='mt-4 bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 justify-end flex text-center'
+                    className='bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 self-end rounded focus:outline-none focus:shadow-outline transition-colors duration-200 justify-end flex text-center'
                 >
                     Visit Website
                 </Link>
