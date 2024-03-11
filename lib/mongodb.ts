@@ -12,7 +12,7 @@ if (!MONGODB_DB) {
 }
 
 interface CachedConnection {
-    conn: { client: MongoClient; db: Db; } | null;
+    conn: Promise<{ client: MongoClient; db: Db; }> | { client: MongoClient; db: Db; } | null;
     promise: Promise<{ client: MongoClient; db: Db; }> | null;
 }
 
