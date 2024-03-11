@@ -9,8 +9,8 @@
       "sourceType": "module"
     },
     "rules": {
-      // Your custom rules or modifications go here
-      "quotes": [2, "single", { "avoidEscape": true }]
+      "quotes": [2, "single", { "avoidEscape": true }],
+      "no-unused-vars": "off"
     }
   }
   

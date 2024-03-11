@@ -19,6 +19,7 @@ import OwnershipChart from './charts/OwnershipChart';
 import CompanyCard from './CompanyCard';
 
 export const Grabber = () => {
+    const axios = require('axios');
     const [ticker, setTicker] = useState('');
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
     const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
@@ -28,6 +29,17 @@ export const Grabber = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { data: session } = useSession();
+
+    const mongodbTest = async () => {
+        try {
+            const data = await axios.get('/api/data');
+            console.log(data.data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    mongodbTest();
 
     return (
         <div className=''>
