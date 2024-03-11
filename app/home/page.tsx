@@ -1,3 +1,5 @@
+'use client';
+
 import {HomePage} from '@/app/home/components/HomePage';
 import {MyParticles} from '@/app/home/components/particles';
 
