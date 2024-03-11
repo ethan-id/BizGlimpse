@@ -3,7 +3,6 @@ import GithubProvider from 'next-auth/providers/github';
 import { Session } from 'next-auth';
 import { User, Account, Profile } from 'next-auth';
 import { AdapterUser } from 'next-auth/adapters';
-import { CallbacksOptions } from 'next-auth';
 import axios from 'axios';
 
 interface ExtendedSession extends Session {

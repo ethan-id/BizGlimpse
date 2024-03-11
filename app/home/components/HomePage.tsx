@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import {
@@ -10,7 +11,7 @@ import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
 import { OwnershipData } from './types/charts/OwnershipChartTypes';
 import { CandlestickData, HistogramData } from 'lightweight-charts';
 import { CompanyCardProps } from './types/CompanyCard';
-import { getAnalysisReport, getCompanyCardData, getEarningsReport, getOwnershipData } from '../utils/grabber-utils';
+import { getAnalysisReport, getCompanyCardData, getEarningsReport, getOwnershipData } from '../utils/getters';
 import { UserInfo } from './UserInfo';
 import CandlestickChart from './charts/CandlestickChart';
 import VolumeHistogram from './charts/VolumeHistogram';
@@ -18,7 +19,7 @@ import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
 import OwnershipChart from './charts/OwnershipChart';
 import CompanyCard from './CompanyCard';
 
-export const Grabber = () => {
+export const HomePage = () => {
     const axios = require('axios');
     const [ticker, setTicker] = useState('');
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
