@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import {
     Input,
     Button,
@@ -13,7 +12,6 @@ import { CandlestickData, HistogramData } from 'lightweight-charts';
 import { CompanyCardProps } from './types/CompanyCard';
 import { ShareActivityData } from './types/ShareActivityCard';
 import { getAnalysisReport, getCompanyCardData, getEarningsReport, getOwnershipData, getShareActivityData } from '../utils/getters';
-import { UserInfo } from './UserInfo';
 import CandlestickChart from './charts/CandlestickChart';
 import VolumeHistogram from './charts/VolumeHistogram';
 import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
@@ -32,12 +30,9 @@ export const HomePage = () => {
     const [shareAcivityData, setShareActivityData] = useState<ShareActivityData | undefined>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { data: session } = useSession();
 
     return (
-        <div className=''>
-            {session && <UserInfo/>}
-            
+        <div className='mt-10'>
             <div className='flex flex-row gap-4 m-auto w-64'>
                 <Input
                     type='text'
