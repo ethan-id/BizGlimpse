@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { Home } from './home/page';
+import Home from './home/page';
 import { SignInPage } from './sign-in/components/SignInPage';
 
 export default function SignIn() {
