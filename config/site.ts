@@ -1,12 +1,16 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: "NextJS + NextUI App with Flask API for scraping Yahoo Finance",
-	description: "Explore a seamless integration of NextJS and NextUI, powering a responsive frontend. Paired with a robust Flask API backend, this app offers real-time scraping capabilities for Yahoo Finance, delivering accurate financial data at your fingertips.",
+	name: 'BizGlimpse',
+	description: 'A comprehensive overview of business insights and market trends.',
 	navItems: [
 		{
-			label: "Home",
-			href: "/",
+			label: 'Sign In',
+			href: '/',
+		},
+		{
+			label: 'Home',
+			href: '/home',
 		}
 	]
 };
