@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-    Input,
-    Button,
-    Progress
-} from '@nextui-org/react';
+import { Input, Button, Progress } from '@nextui-org/react';
 import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
 import { OwnershipData } from './types/charts/OwnershipChartTypes';
 import { CandlestickData, HistogramData } from 'lightweight-charts';
@@ -18,10 +14,12 @@ import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
 import OwnershipChart from './charts/OwnershipChart';
 import { InsiderShareActivityChart } from './InsiderShareActivityChart';
 import CompanyCard from './CompanyCard';
+import { progress } from 'framer-motion';
 
 export const HomePage = () => {
     const axios = require('axios');
     const [ticker, setTicker] = useState('');
+    const [progressValue, setProgressValue] = useState(0);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
     const [volumeData, setVolumeData] = useState<HistogramData[] | undefined>([]);
     const [earningsData, setEarningsData] = useState<QuarterlyEarningsChartProps['data'] | undefined>([]);
@@ -45,20 +43,32 @@ export const HomePage = () => {
                     variant='ghost'
                     onClick={async () => {
                         try {
+                            let newValue = 0;
                             setLoading(true);
+                            newValue += 20;
                             const report = await getAnalysisReport(ticker);
+                            setProgressValue(newValue);
+                            newValue += 20;
                             const earnings = await getEarningsReport(ticker);
+                            setProgressValue(newValue);
+                            newValue += 20;
                             const ownerData = await getOwnershipData(ticker);
+                            setProgressValue(newValue);
+                            newValue += 20;
                             const companyData = await getCompanyCardData(ticker);
+                            setProgressValue(newValue);
+                            newValue += 20;
                             const shareData = await getShareActivityData(ticker);
+                            setProgressValue(newValue);
                             
-                            setProfileData(companyData);
-                            setOwnershipData(ownerData);
-                            setEarningsData(earnings?.data);
-                            setCandlestickData(report?.candlestickData);
-                            setVolumeData(report?.volumeData);
-                            setShareActivityData(shareData);
-                            setLoading(false);
+                            await Promise.all([
+                                setProfileData(companyData),
+                                setOwnershipData(ownerData),
+                                setEarningsData(earnings?.data),
+                                setCandlestickData(report?.candlestickData),
+                                setVolumeData(report?.volumeData),
+                                setShareActivityData(shareData)
+                            ]).then(() => setLoading(false));
                         } catch (error) {
                             setError('An error occurred while fetching data. Please try again later.');
                             setLoading(false);
@@ -69,12 +79,7 @@ export const HomePage = () => {
                 </Button>
             </div>
 
-            {loading && !error && <Progress
-                size='sm'
-                isIndeterminate
-                label='Loading...'
-                className='max-w-md m-auto mt-12'
-            />}
+            {loading && !error && <Progress aria-label="Loading..." value={progressValue} className="max-w-md m-auto mt-12"/>}
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
