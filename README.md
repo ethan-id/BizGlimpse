@@ -1,4 +1,6 @@
-<h1 align='center'>BizGlimpse</h1>
+<p align='center'>
+  <img width="800" src="./public/images/FullNameLogoWhite.png" alt="BizGlimpse Logo"/>
+</p>
 
 <p align='center'>
   <img width="159" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Logo"/>
