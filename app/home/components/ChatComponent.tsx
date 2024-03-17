@@ -10,6 +10,7 @@ interface ChatEntry {
 }
 
 const ChatComponent = ({ additionalData }: { additionalData: string }) => {
+    console.log(additionalData);
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState('');
     const [chatHistory, setChatHistory] = useState<ChatEntry[]>([]);

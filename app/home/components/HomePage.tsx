@@ -17,7 +17,6 @@ import CompanyCard from './CompanyCard';
 import ChatComponent from './ChatComponent';
 
 export const HomePage = () => {
-    const axios = require('axios');
     const [ticker, setTicker] = useState('');
     const [progressValue, setProgressValue] = useState(0);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
@@ -37,8 +36,6 @@ export const HomePage = () => {
                 profileData,
                 ownershipData,
                 earningsData,
-                candlestickData,
-                volumeData,
                 shareAcivityData
             });
 
