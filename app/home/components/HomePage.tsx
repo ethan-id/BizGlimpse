@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Progress } from '@nextui-org/react';
 import { QuarterlyEarningsChartProps } from './charts/QuarterlyEarningsChart';
 import { OwnershipData } from './types/charts/OwnershipChartTypes';
@@ -14,10 +14,9 @@ import QuarterlyEarningsChart from './charts/QuarterlyEarningsChart';
 import OwnershipChart from './charts/OwnershipChart';
 import { InsiderShareActivityChart } from './InsiderShareActivityChart';
 import CompanyCard from './CompanyCard';
-import { progress } from 'framer-motion';
+import ChatComponent from './ChatComponent';
 
 export const HomePage = () => {
-    const axios = require('axios');
     const [ticker, setTicker] = useState('');
     const [progressValue, setProgressValue] = useState(0);
     const [candlestickData, setCandlestickData] = useState<CandlestickData[] | undefined>([]);
@@ -28,6 +27,25 @@ export const HomePage = () => {
     const [shareAcivityData, setShareActivityData] = useState<ShareActivityData | undefined>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [additionalData, setAdditionalData] = useState('');
+
+    // Use useEffect to watch for changes to the data states and update additionalData accordingly
+    useEffect(() => {
+        if (profileData && ownershipData && earningsData && candlestickData && volumeData && shareAcivityData) {
+            const serializedData = JSON.stringify({
+                profileData,
+                ownershipData,
+                earningsData,
+                shareAcivityData
+            });
+
+            let cleanedData = serializedData.replace(/\s+/g, ''); // Remove all whitespace
+            cleanedData = cleanedData.replace(/"/g, ''); // Remove all quote characters
+            cleanedData = cleanedData.replace(/:/g, ''); // Remove all colons
+
+            setAdditionalData(cleanedData);
+        }
+    }, [profileData, ownershipData, earningsData, candlestickData, volumeData, shareAcivityData]);
 
     return (
         <div className='mt-10'>
@@ -61,14 +79,14 @@ export const HomePage = () => {
                             const shareData = await getShareActivityData(ticker);
                             setProgressValue(newValue);
                             
-                            await Promise.all([
-                                setProfileData(companyData),
-                                setOwnershipData(ownerData),
-                                setEarningsData(earnings?.data),
-                                setCandlestickData(report?.candlestickData),
-                                setVolumeData(report?.volumeData),
-                                setShareActivityData(shareData)
-                            ]).then(() => setLoading(false));
+                            setProfileData(companyData);
+                            setOwnershipData(ownerData);
+                            setEarningsData(earnings?.data);
+                            setCandlestickData(report?.candlestickData);
+                            setVolumeData(report?.volumeData);
+                            setShareActivityData(shareData);
+                            setLoading(false);
+                            setProgressValue(0);
                         } catch (error) {
                             setError('An error occurred while fetching data. Please try again later.');
                             setLoading(false);
@@ -95,6 +113,8 @@ export const HomePage = () => {
                     <InsiderShareActivityChart data={shareAcivityData}/>
                 </div>
             }
+
+            {additionalData !== '' && <ChatComponent additionalData={additionalData}/>}
         </div>
     );
 }
