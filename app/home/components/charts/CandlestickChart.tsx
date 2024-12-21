@@ -1,14 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createChart, IChartApi, CandlestickSeriesPartialOptions, CandlestickData, DeepPartial, ISeriesApi, LineData } from 'lightweight-charts';
-import { Switch } from '@nextui-org/react';
-import { sma } from 'indicatorts';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+    createChart,
+    IChartApi,
+    CandlestickSeriesPartialOptions,
+    CandlestickData,
+    DeepPartial,
+    ISeriesApi,
+    LineData
+} from 'lightweight-charts';
+import {Switch} from '@nextui-org/react';
+import {sma} from 'indicatorts';
 
 interface CandlestickChartProps {
     data: CandlestickData[];
     chartOptions?: DeepPartial<CandlestickSeriesPartialOptions>;
 }
 
-const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions }) => {
+const CandlestickChart: React.FC<CandlestickChartProps> = ({data, chartOptions}) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const [smaSelected, setSmaSelected] = useState(false);
@@ -16,11 +24,13 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions 
     const [smaSeries, setSmaSeries] = useState<ISeriesApi<'Line'> | null>(null);
 
     // Calculate SMA data once based on the provided data
-    const closingPrices = data.map(d => d.close);
-    const smaData: LineData[] = sma(14, closingPrices).map((value, index) => ({
-        time: data[index + 14 - 1]?.time,
-        value,
-    })).filter(item => item.time); // Ensure we have the time field
+    const closingPrices = data.map((d) => d.close);
+    const smaData: LineData[] = sma(closingPrices)
+        .map((value, index) => ({
+            time: data[index + 14 - 1]?.time,
+            value
+        }))
+        .filter((item) => item.time); // Ensure we have the time field
 
     useEffect(() => {
         if (chartContainerRef.current) {
@@ -28,13 +38,13 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions 
                 width: chartContainerRef.current.clientWidth,
                 height: 300,
                 layout: {
-                    background: { color: '#2B2B43' },
-                    textColor: '#D9D9D9',
+                    background: {color: '#2B2B43'},
+                    textColor: '#D9D9D9'
                 },
                 grid: {
-                    vertLines: { color: '#404040' },
-                    horzLines: { color: '#404040' },
-                },
+                    vertLines: {color: '#404040'},
+                    horzLines: {color: '#404040'}
+                }
             });
 
             const series = chart.addCandlestickSeries({
@@ -44,14 +54,14 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions 
                 borderUpColor: '#4BFFB5',
                 wickDownColor: '#838CA1',
                 wickUpColor: '#838CA1',
-                ...chartOptions,
+                ...chartOptions
             });
 
             series.setData(data);
             chartRef.current = chart;
 
             const resizeObserver = new ResizeObserver(() => {
-                chart.applyOptions({ width: chartContainerRef.current?.clientWidth, height: 300 });
+                chart.applyOptions({width: chartContainerRef.current?.clientWidth, height: 300});
             });
             resizeObserver.observe(chartContainerRef.current);
 
@@ -70,7 +80,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ data, chartOptions 
             if (!smaSeries) {
                 const lineSeries = chartRef.current.addLineSeries({
                     color: 'rgba(4, 111, 232, 1)',
-                    lineWidth: 2,
+                    lineWidth: 2
                 });
                 lineSeries.setData(smaData);
                 setSmaSeries(lineSeries);
